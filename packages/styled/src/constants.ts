@@ -18,7 +18,7 @@ export const domElements = [
   'body',
   'br',
   'button',
-  /* 'canvas',
+  'canvas',
   'caption',
   'cite',
   'code',
@@ -135,5 +135,5 @@ export const domElements = [
   'stop',
   'svg',
   'text',
-  'tspan', */
+  'tspan',
 ] as const

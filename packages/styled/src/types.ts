@@ -20,11 +20,13 @@ type VariantClassKey<T extends VariantClassConfig> = {
   [K in keyof T]: `${K}:${keyof T[K]}`
 }[keyof T]
 
-type ExchangeClassConfig<T extends VariantClassConfig, OptionalProps extends ConditionalClassConfig | undefined> = {
+type ModifierlassConfig<T extends VariantClassConfig, OptionalProps extends ConditionalClassConfig | undefined> = {
   [key: string]: {
     variant: VariantClassKey<T>
     prop: keyof OptionalProps
-    with: ClassList
+    add?: ClassList
+    remove?: ClassList
+    replace?: ClassList
   }
 }
 
@@ -32,12 +34,12 @@ interface ClassConfig<
   Variants extends VariantClassConfig = NonNullable<unknown>,
   DefaultVariants extends DefaultVariantClassConfig<Variants> = NonNullable<unknown>,
   Conditionals extends ConditionalClassConfig = NonNullable<unknown>,
-  Exchange extends ExchangeClassConfig<Variants, Conditionals> = NonNullable<unknown>,
+  Modifiers extends ModifierlassConfig<Variants, Conditionals> = NonNullable<unknown>,
 > {
   variants?: Variants
   defaultVariants?: DefaultVariants
-  conditional?: Conditionals
-  exchange?: Exchange
+  conditionals?: Conditionals
+  modifiers?: Modifiers
 }
 
 type ValidateConditionals<Conditionals extends ConditionalClassConfig> = {
@@ -77,37 +79,37 @@ export type CVFunction = <
   Variants extends VariantClassConfig = NonNullable<unknown>,
   DefaultVariants extends DefaultVariantClassConfig<Variants> = NonNullable<unknown>,
   Conditionals extends ConditionalClassConfig = NonNullable<unknown>,
-  Exchange extends ExchangeClassConfig<Variants, Conditionals> = NonNullable<unknown>,
+  Modifiers extends ModifierlassConfig<Variants, Conditionals> = NonNullable<unknown>,
 >(
   base: ClassList,
-  config?: ClassConfig<Variants, DefaultVariants, Conditionals, Exchange>,
+  config?: ClassConfig<Variants, DefaultVariants, Conditionals, Modifiers>,
 ) => (props?: StyledProps<Variants, DefaultVariants, Conditionals>) => string
 
 export type CVConfigFunction = <
   Variants extends VariantClassConfig = NonNullable<unknown>,
   DefaultVariants extends DefaultVariantClassConfig<Variants> = NonNullable<unknown>,
   Conditionals extends ConditionalClassConfig = NonNullable<unknown>,
-  Exchange extends ExchangeClassConfig<Variants, Conditionals> = NonNullable<unknown>,
+  Modifiers extends ModifierlassConfig<Variants, Conditionals> = NonNullable<unknown>,
 >(
   base: ClassList,
-  config: ClassConfig<Variants, DefaultVariants, Conditionals, Exchange>,
+  config: ClassConfig<Variants, DefaultVariants, Conditionals, Modifiers>,
 ) => {
   base: ClassList,
-  variants: ClassConfig<Variants, DefaultVariants, Conditionals, Exchange>,
+  variants: ClassConfig<Variants, DefaultVariants, Conditionals, Modifiers>,
 }
 
 export type CXResolver = <
   Variants extends VariantClassConfig,
   DefaultVariants extends DefaultVariantClassConfig<Variants>,
   Conditionals extends ConditionalClassConfig,
-  Exchange extends ExchangeClassConfig<Variants, Conditionals>,
+  Modifiers extends ModifierlassConfig<Variants, Conditionals>,
 >(
   originProps: Record<string, unknown>,
   base: ClassList,
   variants: Variants,
   defaultVariants: DefaultVariants,
-  conditional: Conditionals,
-  exchange: Exchange,
+  conditionals: Conditionals,
+  modifiers: Modifiers,
 ) => [string, Record<string, unknown>]
 
 // Forked types from https://github.com/vinpac/windstitch
@@ -128,11 +130,11 @@ type StyledTagFunction <
   Variants extends VariantClassConfig = NonNullable<unknown>,
   DefaultVariants extends DefaultVariantClassConfig<Variants> = NonNullable<unknown>,
   Conditionals extends ConditionalClassConfig = NonNullable<unknown>,
-  Exchange extends ExchangeClassConfig<Variants, Conditionals> = NonNullable<unknown>,
+  Modifiers extends ModifierlassConfig<Variants, Conditionals> = NonNullable<unknown>,
 >
   (
     base: ClassList,
-    config?: ClassConfig<Variants, DefaultVariants, Conditionals, Exchange>,
+    config?: ClassConfig<Variants, DefaultVariants, Conditionals, Modifiers>,
     displayName?: string
   ) => ForwardRefExoticComponent<
     JSX.IntrinsicElements[Element]

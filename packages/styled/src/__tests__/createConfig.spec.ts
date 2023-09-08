@@ -57,7 +57,7 @@ describe('createConfig', () => {
         defaultVariants: {
           size: 'sm',
         },
-        conditional: {
+        conditionals: {
           outline: 'outline',
         },
       })

@@ -16,8 +16,8 @@ const createVariants: CVFunction = (base, config) => (props) => {
     base,
     config?.variants || {},
     config?.defaultVariants || {},
-    config?.conditional || {},
-    config?.exchange || {},
+    config?.conditionals || {},
+    config?.modifiers || {},
   )
 
   return classList
@@ -43,8 +43,8 @@ domElements.forEach(domElement => {
           base,
           config?.variants || {},
           config?.defaultVariants || {},
-          config?.conditional || {},
-          config?.exchange || {},
+          config?.conditionals || {},
+          config?.modifiers || {},
         )
       }, [JSON.stringify(props)])
   

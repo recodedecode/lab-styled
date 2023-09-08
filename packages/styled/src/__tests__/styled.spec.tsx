@@ -114,7 +114,7 @@ describe('styled', () => {
     it('should render with conditional class applied', () => {
 
       const Button = styled.button('baseclass', {
-        conditional: {
+        conditionals: {
           outline: 'outline',
         }
       })
@@ -128,7 +128,7 @@ describe('styled', () => {
     it('should render without conditional class applied', () => {
 
       const Button = styled.button('baseclass', {
-        conditional: {
+        conditionals: {
           outline: 'outline',
         }
       })
@@ -142,7 +142,7 @@ describe('styled', () => {
     it('should render with conditional primary class applied', () => {
 
       const Button = styled.button('baseclass', {
-        conditional: {
+        conditionals: {
           outline: (active: boolean) => active ? 'outline' : 'fill',
         }
       })
@@ -157,7 +157,7 @@ describe('styled', () => {
     it('should render with conditional fallback class applied', () => {
 
       const Button = styled.button('baseclass', {
-        conditional: {
+        conditionals: {
           outline: (active: boolean) => active ? 'outline' : 'fill',
         }
       })
@@ -172,7 +172,7 @@ describe('styled', () => {
     it('should render with conditional array class list applied', () => {
 
       const Button = styled.button('baseclass', {
-        conditional: {
+        conditionals: {
           outline: ['outline', 'bright'],
         }
       })
@@ -186,9 +186,9 @@ describe('styled', () => {
 
   })
 
-  describe('exchange classes', () => {
+  describe('modifier classes', () => {
 
-    it('should render with exchange class applied', () => {
+    it('should render with modifier class applied', () => {
 
       const Button = styled.button('baseclass', {
         variants: {
@@ -197,14 +197,14 @@ describe('styled', () => {
             lg: 'large',
           },
         },
-        conditional: {
+        conditionals: {
           outline: 'outline',
         },
-        exchange: {
+        modifiers: {
           smOutline: {
             variant: 'size:sm',
             prop: 'outline',
-            with: 'small-outline',
+            replace: 'small-outline',
           },
         },
       })
@@ -217,7 +217,7 @@ describe('styled', () => {
       expect(button).toHaveClass('small-outline')
     })
 
-    it('should render with exchange array class list applied', () => {
+    it('should render with modifier array class list applied', () => {
 
       const Button = styled.button('baseclass', {
         variants: {
@@ -226,14 +226,14 @@ describe('styled', () => {
             lg: 'large',
           },
         },
-        conditional: {
+        conditionals: {
           outline: 'outline',
         },
-        exchange: {
+        modifiers: {
           smOutline: {
             variant: 'size:sm',
             prop: 'outline',
-            with: ['small-outline', 'bright'],
+            replace: ['small-outline', 'bright'],
           },
         },
       })
@@ -260,15 +260,15 @@ describe('styled', () => {
             lg: ['large', 'lg'],
           },
         },
-        conditional: {
+        conditionals: {
           outline: ['outline', 'border'],
           contrast: (active: boolean) => active ? ['high-contrast'] : ['low-contrast']
         },
-        exchange: {
+        modifiers: {
           smOutline: {
             variant: 'size:sm',
             prop: 'outline',
-            with: ['small-outline', 'sm-outline'],
+            replace: ['small-outline', 'sm-outline'],
           },
         },
       })

@@ -1,8 +1,8 @@
 # Styled - React classNames
 
-This is a small library for composing variants, conditionals and exchangable class names on React components.
+This is a small library for composing variants, conditionals and modifier class names on React components.
 
-This project was inspired by the [Class Variance Authority](https://github.com/joe-bell/cva) and [Windstich](https://windstitch.vercel.app/) libraries. It varries from these in its API design by not only enabling variants but also conditionals and exchange configuration.
+This project was inspired by the [Class Variance Authority](https://github.com/joe-bell/cva) and [Windstich](https://windstitch.vercel.app/) libraries. It varries from these in its API design by not only enabling variants but also conditionals and modifier configuration which provide a uniquely powerful way to handle complex edge cases.
 
 This library exposes methods for creating and invoking class names as functions or as React components.
 
@@ -67,7 +67,7 @@ export const Button = styled.button('button', {
   defaultVariants: {
     size: 'md',
   },
-  conditional: {
+  conditionals: {
     outline: 'outline',
     contrast: (active: boolean) => active ? 'high-contrast' : 'low-contrast',
   },
@@ -82,9 +82,17 @@ const App = () => (
 )
 ```
 
-### Exchange
+### Modifiers
 
-If for some reason you need to replace classes that may conflict in some way then you can use the exchange configuration. This will take the selected variant and conditional property and replace those classes.
+There are some *edge cases* where you may find yourself needing to *add, remove or replace* classes. This may be due to a complex design problem or a conflict in classes themselves. In these cases you can use the modifiers configuration.
+
+The order of operation is deterministic and happens as per the below:
+
+* `replace` - an *optional* (`string | string[]`) property that will remove all existing classes and replace those values with those listed here.
+* `remove` - an *optional* (`string | string[]`) propery that will remove any listed classes from the existing class list.
+* `add` - an *optional* (`string | string[]`) property that will add new classes to the existing class list.
+
+Modifiers *should be used sparingly* on edge cases. These can easily over complicate your component design for other developers. If you find yourself using this too often you should reconsider how you're building your components.
 
 ```typescript
 // Button.tsx
@@ -104,14 +112,14 @@ export const Button = styled.button('button', {
   defaultVariants: {
     size: 'md',
   },
-  conditional: {
+  conditionals: {
     outline: 'outline',
   },
-  exchange: {
+  modifiers: {
     smOutline: {
       variant: 'size:sm',
       prop: 'outline',
-      with: 'small-outline',
+      replace: 'small-outline',
     }
   }
 })
@@ -155,16 +163,16 @@ export const Button = styled.button([
     intent: 'primary',
     size: 'md',
   },
-  conditional: {
+  conditionals: {
     outline: ['outline'],
     contrast: (active: boolean) => active ? ['bright'] : ['dim'],
     rounded: 'rounded-full',
   },
-  exchange: {
+  modifiers: {
     smOutline: {
       variant: 'size:sm',
       prop: 'outline',
-      with: [
+      replace: [
         'bg-transparent border border-primary',
         'text-primary',
       ],
@@ -200,14 +208,14 @@ const config = styled.createConfig('button-base', {
   defaultVariants: {
     size: 'sm',
   },
-  conditional: {
+  conditionals: {
     outline: 'outline',
   },
-  exchange: {
+  modifiers: {
     smOutline: {
       variant: 'size:sm',
       prop: 'outline',
-      with: 'small-outline',
+      replace: 'small-outline',
     },
   },
 })
@@ -231,7 +239,7 @@ const style = styled.createVariants('base', {
       lg: 'large',
     },
   },
-  conditional: {
+  conditionals: {
     outline: 'outline',
   }
 })
@@ -263,7 +271,7 @@ export const buttonStyleConfig = styled.createConfig('button-base', {
   defaultVariants: {
     size: 'md',
   },
-  conditional: {
+  conditionals: {
     outline: 'outline',
   }
 })

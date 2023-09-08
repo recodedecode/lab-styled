@@ -86,7 +86,7 @@ describe('createVariants', () => {
     it('should return class list with conditional', () => {
 
       const style = styled.createVariants('baseclass', {
-        conditional: {
+        conditionals: {
           outline: 'outline',
         },
       })
@@ -98,7 +98,7 @@ describe('createVariants', () => {
     it('should return class list with conditional using function', () => {
 
       const style = styled.createVariants('baseclass', {
-        conditional: {
+        conditionals: {
           bold: ['bold', 'heavy'],
           outline: (active: boolean) => active ? 'outline' : ['fill border'],
         },
@@ -117,9 +117,9 @@ describe('createVariants', () => {
 
   })
 
-  describe('exchange', () => {
+  describe('modifiers', () => {
 
-    it('should return class list with exchange', () => {
+    it('should return class list with modifier', () => {
 
       const style = styled.createVariants('baseclass', {
         variants: {
@@ -128,14 +128,14 @@ describe('createVariants', () => {
             lg: 'large',
           },
         },
-        conditional: {
+        conditionals: {
           outline: 'outline',
         },
-        exchange: {
+        modifiers: {
           smOutline: {
             variant: 'size:sm',
             prop: 'outline',
-            with: 'custom-small-outline',
+            replace: 'custom-small-outline',
           }
         },
       })
@@ -143,6 +143,111 @@ describe('createVariants', () => {
       expect(style({ size: 'sm' })).toEqual('baseclass small')
       expect(style({ size: 'lg', outline: true })).toEqual('baseclass large outline')
       expect(style({ size: 'sm', outline: true })).toEqual('baseclass custom-small-outline')
+    })
+
+    it('should return class list with single modifier added', () => {
+
+      const style = styled.createVariants('baseclass', {
+        variants: {
+          size: {
+            sm: 'small',
+            lg: 'large',
+          },
+        },
+        conditionals: {
+          outline: 'outline',
+        },
+        modifiers: {
+          smOutline: {
+            variant: 'size:sm',
+            prop: 'outline',
+            add: 'rounded-sm',
+          }
+        },
+      })
+
+      expect(style({ size: 'sm' })).toEqual('baseclass small')
+      expect(style({ size: 'lg', outline: true })).toEqual('baseclass large outline')
+      expect(style({ size: 'sm', outline: true })).toEqual('baseclass small outline rounded-sm')
+    })
+
+    it('should return class list with single modifier removed', () => {
+
+      const style = styled.createVariants('baseclass', {
+        variants: {
+          size: {
+            sm: 'small',
+            lg: 'large',
+          },
+        },
+        conditionals: {
+          outline: 'outline',
+        },
+        modifiers: {
+          smOutline: {
+            variant: 'size:sm',
+            prop: 'outline',
+            remove: 'small',
+          }
+        },
+      })
+
+      expect(style({ size: 'sm' })).toEqual('baseclass small')
+      expect(style({ size: 'lg', outline: true })).toEqual('baseclass large outline')
+      expect(style({ size: 'sm', outline: true })).toEqual('baseclass outline')
+    })
+
+    it('should return class list with modifier removed', () => {
+
+      const style = styled.createVariants('baseclass', {
+        variants: {
+          size: {
+            sm: ['small', 'rounded', 'bg-white'],
+            lg: 'large',
+          },
+        },
+        conditionals: {
+          outline: 'outline',
+        },
+        modifiers: {
+          smOutline: {
+            variant: 'size:sm',
+            prop: 'outline',
+            remove: ['rounded', 'bg-white'],
+          }
+        },
+      })
+
+      expect(style({ size: 'sm' })).toEqual('baseclass small rounded bg-white')
+      expect(style({ size: 'lg', outline: true })).toEqual('baseclass large outline')
+      expect(style({ size: 'sm', outline: true })).toEqual('baseclass small outline')
+    })
+
+    it('should return class list with modifier removed and added', () => {
+
+      const style = styled.createVariants('baseclass', {
+        variants: {
+          size: {
+            sm: ['small', 'rounded', 'bg-white'],
+            lg: 'large',
+          },
+        },
+        conditionals: {
+          outline: 'outline',
+        },
+        modifiers: {
+          smOutline: {
+            variant: 'size:sm',
+            prop: 'outline',
+            remove: ['rounded', 'bg-white'],
+            add: ['bright border', 'bg-red'],
+          }
+        },
+      })
+
+      expect(style({ size: 'sm' })).toEqual('baseclass small rounded bg-white')
+      expect(style({ size: 'lg', outline: true })).toEqual('baseclass large outline')
+      expect(style({ size: 'sm', outline: true })).toEqual('baseclass small outline bright border bg-red')
     })
 
   })
@@ -158,15 +263,15 @@ describe('createVariants', () => {
             lg: ['large', 'lg'],
           },
         },
-        conditional: {
+        conditionals: {
           outline: ['outline', 'border'],
           contrast: (active: boolean) => active ? ['high-contrast'] : ['low-contrast']
         },
-        exchange: {
+        modifiers: {
           smOutline: {
             variant: 'size:sm',
             prop: 'outline',
-            with: ['small-outline', 'sm-outline'],
+            replace: ['small-outline', 'sm-outline'],
           },
         },
       })
